@@ -233,10 +233,14 @@ class DefaultViewer extends React.Component {
                         .filter(feature => feature !== undefined)
         features.forEach(feature => {
             console.log(feature)
-            if (feature.properties && feature.properties.__att) {
-                feature.properties.__att.split(';').forEach(att => {
-                    const attProp = att.split('#')
-                    this.state.attachments.push({url: `/static/attachment/${attProp[0]}`, type: attProp[1], tanggal: attProp[2]})
+            if (feature.properties && feature.properties.___att) {
+                feature.properties.___att.split(';').forEach(att => {
+                    if (att) {
+                        const attProp = att.split('#')
+                        if (attProp.length > 2 && (attProp[1] === 'photo' || attProp[1] === 'video')) {
+                            this.state.attachments.push({url: `/static/attachment/${attProp[0]}`, type: attProp[1], tanggal: attProp[2]})
+                        }
+                    }
                 })
             }
         }) 
