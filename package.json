@@ -237,7 +237,7 @@
     "react-error-boundary": "1.2.5",
     "react-grid-layout": "1.2.0",
     "react-image-lightbox": "4.2.2",
-    "react-image-video-lightbox": "git+https://github.com/deedee/react-image-video-lightbox#feature/tanggal",
+    "react-image-video-lightbox": "git+https://github.com/deedee/react-image-video-lightbox.git#master",
     "react-input-autosize": "1.1.4",
     "react-intersection-observer": "8.24.1",
     "react-intl": "2.3.0",
