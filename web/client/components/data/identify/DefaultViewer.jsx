@@ -230,9 +230,10 @@ class DefaultViewer extends React.Component {
             </Container>
         ];
         console.log(currResponse);
-        if (currResponse) {
-            if (currResponse.features) {
-                currResponse.features.forEach(feature => {
+        if (currResponse && currResponse.length > 0) {
+            const resp = currResponse[0].response;
+            if (resp.features) {
+                resp.features.forEach(feature => {
                     console.log(feature)
                     if (feature.properties && feature.properties.___att) {
                         feature.properties.___att.split(';').forEach(att => {
@@ -249,6 +250,7 @@ class DefaultViewer extends React.Component {
             }
         }
         console.log(responses);
+        console.log(this.state.attachments);
         // Display renderEmptyPages at top in mobile for seamless swipeable view
         componentOrder = this.props.isMobile ? componentOrder : reverse(componentOrder);
         return (
