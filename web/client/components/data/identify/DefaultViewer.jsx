@@ -16,7 +16,7 @@ import { Alert, Panel, Accordion } from 'react-bootstrap';
 import ViewerPage from './viewers/ViewerPage';
 import { isEmpty, reverse, startsWith } from 'lodash';
 import { getFormatForResponse } from '../../../utils/IdentifyUtils';
-import ReactImageVideoLightbox from 'react-image-video-lightbox';
+import ReactImageVideoLightbox from 'react-image-video-lightbox/lib';
 
 class DefaultViewer extends React.Component {
     static propTypes = {
@@ -148,7 +148,7 @@ class DefaultViewer extends React.Component {
     }
 
     renderAttachment = () => {
-        if (this.state.attachments) {
+        if (this.state.attachments && this.state.attachments.length > 0) {
             return (
                 <div
                   style={{
@@ -229,21 +229,24 @@ class DefaultViewer extends React.Component {
                 {this.renderPages()}
             </Container>
         ];
-        let features = responses.map(response => response.response.features)
-                        .filter(feature => feature !== undefined)
-        features.forEach(feature => {
-            console.log(feature)
-            if (feature.properties && feature.properties.___att) {
-                feature.properties.___att.split(';').forEach(att => {
-                    if (att) {
-                        const attProp = att.split('#')
-                        if (attProp.length > 2 && (attProp[1] === 'photo' || attProp[1] === 'video')) {
-                            this.state.attachments.push({url: `/static/attachment/${attProp[0]}`, type: attProp[1], tanggal: attProp[2]})
-                        }
+        if (currResponse) {
+            if (currResponse.features) {
+                currResponse.features.forEach(feature => {
+                    console.log(feature)
+                    if (feature.properties && feature.properties.___att) {
+                        feature.properties.___att.split(';').forEach(att => {
+                            if (att) {
+                                const attProp = att.split('#')
+                                if (attProp.length > 2 && (attProp[1] === 'photo' || attProp[1] === 'video')) {
+                                    this.state.attachments.push({url: `/static/attachment/${attProp[0]}`, type: attProp[1], tanggal: attProp[2]})
+                                }
+                            }
+                        })
                     }
                 })
+
             }
-        }) 
+        }
         
         // Display renderEmptyPages at top in mobile for seamless swipeable view
         componentOrder = this.props.isMobile ? componentOrder : reverse(componentOrder);
