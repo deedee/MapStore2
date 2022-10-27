@@ -162,11 +162,8 @@ class DefaultViewer extends React.Component {
                   <div>
                     <button
                       className='btn btn-primary'
-                      onClick={() => {
-                        console.log('open click');
-                        this.setState({openAttachment: true}, () =>
-                      {console.log('open');
-                        console.log(this.state.openAttachment)})}}
+                      onClick={() => 
+                        this.setState({openAttachment: true}, () => this.forceUpdate())}
                     >
                       Lihat Lampiran Foto/Video
                     </button>
@@ -176,12 +173,8 @@ class DefaultViewer extends React.Component {
                       data={this.state.attachments}
                       startIndex={0}
                       showResourceCount={true}
-                      onCloseCallback={() => {
-                        console.log('close click');
-                        this.setState({openAttachment: false}, () =>{
-                            console.log('set close');
-                            console.log(this.state.openAttachment);
-                        } )}}
+                      onCloseCallback={() => 
+                        this.setState({openAttachment: false}, () => this.forceUpdate())}
                     />
                   )}
                 </div>
@@ -239,12 +232,10 @@ class DefaultViewer extends React.Component {
                 {this.renderPages()}
             </Container>
         ];
-        console.log(currResponse);
         if (currResponse && currResponse.length > 0) {
             const resp = currResponse[0].response;
             if (resp.features) {
                 resp.features.forEach(feature => {
-                    console.log(feature)
                     if (feature.properties && feature.properties.___att) {
                         feature.properties.___att.split(';').forEach(att => {
                             if (att) {
@@ -259,8 +250,6 @@ class DefaultViewer extends React.Component {
 
             }
         }
-        console.log(responses);
-        console.log(this.state.attachments);
         // Display renderEmptyPages at top in mobile for seamless swipeable view
         componentOrder = this.props.isMobile ? componentOrder : reverse(componentOrder);
         return (
