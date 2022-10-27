@@ -17,6 +17,7 @@ import ViewerPage from './viewers/ViewerPage';
 import { isEmpty, reverse, startsWith } from 'lodash';
 import { getFormatForResponse } from '../../../utils/IdentifyUtils';
 import ReactImageVideoLightbox from 'react-image-video-lightbox/lib';
+import { convertGeoJSONToInternalModel } from '../../../utils/AnnotationsUtils';
 
 class DefaultViewer extends React.Component {
     static propTypes = {
@@ -161,7 +162,11 @@ class DefaultViewer extends React.Component {
                   <div>
                     <button
                       className='btn btn-primary'
-                      onClick={() => this.setState({openAttachment: true})}
+                      onClick={() => {
+                        console.log('open click');
+                        this.setState({openAttachment: true}, () =>
+                      {console.log('open');
+                        console.log(this.state.openAttachment)})}}
                     >
                       Lihat Lampiran Foto/Video
                     </button>
@@ -171,7 +176,12 @@ class DefaultViewer extends React.Component {
                       data={this.state.attachments}
                       startIndex={0}
                       showResourceCount={true}
-                      onCloseCallback={() => this.setState({openAttachment: false} )}
+                      onCloseCallback={() => {
+                        console.log('close click');
+                        this.setState({openAttachment: false}, () =>{
+                            console.log('set close');
+                            console.log(this.state.openAttachment);
+                        } )}}
                     />
                   )}
                 </div>
