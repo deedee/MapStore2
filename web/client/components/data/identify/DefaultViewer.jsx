@@ -70,7 +70,32 @@ class DefaultViewer extends React.Component {
 
     state = {
         openAttachment: false,
-        attachments: []
+        attachments: [
+            {
+              url: "https://placekitten.com/450/300",
+              type: "photo",
+              altTag: "some image",
+              tanggal: "2010-09-09"
+            },
+            {
+              url: "https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_480_1_5MG.mp4",
+              type: "video",
+              title: "My Placeholder video",
+              tanggal: "2010-09-10"
+            },
+            {
+              url: "https://placekitten.com/550/500",
+              type: "photo",
+              altTag: "some other image",
+              tanggal: "2010-09-11"
+            },
+            {
+              url: "https://www.youtube.com/embed/ScMzIvxBSi4",
+              type: "video",
+              title: "some other video",
+              tanggal: "2010-09-12"
+            },
+          ]
     }
 
     shouldComponentUpdate(nextProps) {
@@ -229,6 +254,7 @@ class DefaultViewer extends React.Component {
                 {this.renderPages()}
             </Container>
         ];
+        console.log(currResponse);
         if (currResponse) {
             if (currResponse.features) {
                 currResponse.features.forEach(feature => {
@@ -247,7 +273,7 @@ class DefaultViewer extends React.Component {
 
             }
         }
-        
+        console.log(responses);
         // Display renderEmptyPages at top in mobile for seamless swipeable view
         componentOrder = this.props.isMobile ? componentOrder : reverse(componentOrder);
         return (
