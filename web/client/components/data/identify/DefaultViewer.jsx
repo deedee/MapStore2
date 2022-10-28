@@ -234,7 +234,7 @@ class DefaultViewer extends React.Component {
         ];
         if (currResponse && currResponse.length > 0) {
             const resp = currResponse[0].response;
-            if (resp.features) {
+            if (resp.features && this.state.attachments.length == 0) {
                 resp.features.forEach(feature => {
                     if (feature.properties && feature.properties.___att) {
                         feature.properties.___att.split(';').forEach(att => {
