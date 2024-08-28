@@ -16,6 +16,7 @@ import { Alert, Panel, Accordion } from 'react-bootstrap';
 import ViewerPage from './viewers/ViewerPage';
 import { isEmpty, reverse, startsWith } from 'lodash';
 import { getFormatForResponse } from '../../../utils/IdentifyUtils';
+import ReactImageVideoLightbox from 'react-image-video-lightbox/lib';
 
 class DefaultViewer extends React.Component {
     static propTypes = {
@@ -66,6 +67,12 @@ class DefaultViewer extends React.Component {
         isMobile: false,
         disableInfoAlert: false
     };
+
+    state = {
+        openAttachment: false,
+        attachments: []
+    }
+
 
     shouldComponentUpdate(nextProps) {
         return nextProps.responses !== this.props.responses || nextProps.missingResponses !== this.props.missingResponses || nextProps.index !== this.props.index;
@@ -144,6 +151,42 @@ class DefaultViewer extends React.Component {
         return null;
     };
 
+    renderAttachment = () => {
+        if (this.state.attachments && this.state.attachments.length > 0) {
+            return (
+                <div
+                  style={{
+                    margin: "auto",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <div>
+                    <button
+                      className='btn btn-primary'
+                      onClick={() =>
+                        this.setState({openAttachment: true}, () => this.forceUpdate())}
+                    >
+                      Lihat Lampiran Foto/Video
+                    </button>
+                  </div>
+                  {this.state.openAttachment && (
+                    <ReactImageVideoLightbox
+                      data={this.state.attachments}
+                      startIndex={0}
+                      showResourceCount={true}
+                      onCloseCallback={() =>
+                        this.setState({openAttachment: false}, () => this.forceUpdate())}
+                    />
+                  )}
+                </div>
+              );
+        }
+        return null
+    }
+
+
     renderEmptyPages = () => {
         const {emptyResponses} = this.getResponseProperties();
         if (this.props.missingResponses === 0 && emptyResponses) {
@@ -205,11 +248,31 @@ class DefaultViewer extends React.Component {
                 {this.renderPages()}
             </Container>
         ];
+        if (currResponse && currResponse.length > 0) {
+            const resp = currResponse[0].response;
+            if (resp.features && this.state.attachments.length == 0) {
+                resp.features.forEach(feature => {
+                    if (feature.properties && feature.properties.___att) {
+                        feature.properties.___att.split(';').forEach(att => {
+                            if (att) {
+                                const attProp = att.split('#')
+                                if (attProp.length > 2 && (attProp[1] === 'photo' || attProp[1] === 'video')) {
+                                    this.state.attachments.push({url: `/static/attachment/${attProp[0]}`, type: attProp[1], tanggal: attProp[2]})
+                                }
+                            }
+                        })
+                    }
+                })
+
+            }
+        }
+	    
         // Display renderEmptyPages at top in mobile for seamless swipeable view
         componentOrder = this.props.isMobile ? componentOrder : reverse(componentOrder);
         return (
             <div className="mapstore-identify-viewer">
                 {!emptyResponses ? componentOrder.map((c)=> c) : this.renderEmptyPages()}
+		{this.renderAttachment()}
             </div>
         );
     }
